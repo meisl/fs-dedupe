@@ -5,7 +5,7 @@ const expect = require('expect.js'),
 
 const path_fix = 'test/fixtures',
 	path_inaccassible = path_fix + '/inaccessible';
-	
+
 describe('test-setup: ' + path_fix, function () {
 
 	it('should exist', function () {
@@ -39,9 +39,9 @@ describe('test-setup: ' + path_fix, function () {
 		});
 	});
 
-	describe('"symlink-to-outside-dir/"', function () {
+	describe('"to-outside/symlink-to-outside-dir/"', function () {
 		it('should be a directory link', function () {
-			let p = path_fix + '/symlink-to-dir/';
+			let p = path_fix + '/to-outside/symlink-to-outside-dir/';
 			expect(fs.statSync(p).isDirectory()).to.be(true);
 			expect(fs.lstatSync(p).isSymbolicLink()).to.be(true);
 		});
