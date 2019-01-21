@@ -1,5 +1,6 @@
---recursive
 --check-leaks
 --colors
 --reporter list
+# --recursive
 --watch
+--exclude test/fixtures/**/*

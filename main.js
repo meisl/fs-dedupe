@@ -1,13 +1,13 @@
 'use strict';
 
-const glob = require('glob');
+const fs = require('fs');
 
 module.exports.version = require('./package.json').version;
 
-module.exports.scan = function (path) {
-	let entries = glob.sync('**', { cwd: path, mark: true });
+module.exports.stepSync = function (path) {
+	let entries;
 	
-	
+	entries = fs.readdirSync(path, { withFileTypes: true });
 	return entries;
 };
 

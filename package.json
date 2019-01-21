@@ -16,7 +16,6 @@
   "author": "meisl",
   "license": "ISC",
   "dependencies": {
-    "glob": "^7.1.3"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
