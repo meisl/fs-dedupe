@@ -1,6 +1,7 @@
 'use strict';
 
 const expect = require('expect.js'),
+	skip = () => {},
 	path = require('path'),
 	{ stepSync, walkSync } = require('../');
 
@@ -8,6 +9,8 @@ const path_fix = path.join('test', 'fixtures'),
 	path_inaccassible = path.join(path_fix, 'inaccessible'),
 	path_nonexistent = path.join('i', 'do', 'not', 'exist');
 
+	
+	
 describe('stepSync', function () {
 
 	it('on a file should throw', function () {
@@ -88,17 +91,17 @@ describe('walkSync', function () {
 		expect(folderNames).to.contain('symlink-to-not-so-outside-dir');
 	});
 
-	it('on proper directory should list all entries from lower levels', function () {
+	it('on proper directory should list all entries from lower levels', () => {
 		let entries = walkSync(path_fix);
 		let exp;
 		
-		let folderNames = entries.folders.map(e => e.name);
-		expect(folderNames).to.contain('to-outside');
-		expect(folderNames).to.contain(
+		let folderPaths = entries.folders.map(e => e.path);
+		expect(folderPaths).to.contain('to-outside');
+		expect(folderPaths).to.contain(
 			path.join('to-outside', 'symlink-to-outside-dir'));
 		expect(entries.folders).to.have.length(8);
 		
-		let fileNames = entries.files.map(e => e.name);
+		let filePaths = entries.files.map(e => e.path);
 		exp = [
 			'zero.txt',
 			'one.txt',
@@ -111,13 +114,20 @@ describe('walkSync', function () {
 			path.join('to-outside', 'symlink-to-outside-file'),
 		];
 		exp.forEach(x => {
-			expect(fileNames).to.contain(x);
+			expect(filePaths).to.contain(x);
 		});
 		expect(entries.files).to.have.length(exp.length);
 		
 		expect(entries).to.have.length(entries.files.length + entries.folders.length);
 	});
 
-	
+	skip('bench', () => {
+		it('asdf', () => {
+			let entries = walkSync('C:'); // 11934 entries: 6953 files + ?? folders
+			//expect(entries.files.length).to.be(-1);
+			expect(Object.keys(entries.bySize).length).to.be(-1); // 3444; 917 > 1
+		});
+	});
+
 });
 
