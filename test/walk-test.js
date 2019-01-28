@@ -123,8 +123,9 @@ describe('walkSync', function () {
 
 	skip('bench', () => {
 		it('asdf', () => {
-			let entries = walkSync('C:'); // 11934 entries: 6953 files + ?? folders
+			let entries = walkSync('C:\\Programme'); // 11934 entries: 6953 files + ?? folders
 			//expect(entries.files.length).to.be(-1);
+			expect(entries).to.have.length(-1);
 			expect(Object.keys(entries.bySize).length).to.be(-1); // 3444; 917 > 1
 		});
 	});
