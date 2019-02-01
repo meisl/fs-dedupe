@@ -4,9 +4,10 @@ const expect = require('expect.js'),
 	skip = () => {},
 	DirEntry = require('../lib/DirEntry');
 
-function toJSONandBack(e) {
+function serializeAndParse(e) {
 	let s, o;
-	s = '{' + e.serialize() + '}';
+	s = e.serialize();
+	expect(s).to.be.a('string');
 	try {
 		o = JSON.parse(s);
 	} catch (err) {
@@ -30,11 +31,9 @@ describe('DirEntry', () => {
 				isFile: () => true,
 				isDirectory: () => false
 			});
-			let o = toJSONandBack(x);
-			expect(o).to.have.property(name);
-			expect(o[name]).to.be.an(Array);
-			expect(o[name]).to.have.length(0);
-			
+			let o = serializeAndParse(x);
+			expect(o).to.be.an(Array);
+			expect(o).to.have.property('length').greaterThan(3);
 		});
 		it('empty Folder', () => {
 			const name = 'bar';
@@ -43,10 +42,13 @@ describe('DirEntry', () => {
 				isFile: () => false,
 				isDirectory: () => true
 			});
-			let o = toJSONandBack(x);
-			expect(o).to.have.property(name);
-			expect(o[name]).to.have.length(-1);
-			
+			let o = serializeAndParse(x);
+			expect(o).to.be.an(Object);
+			expect(o).not.to.be.an(Array);
+			expect(o).to.only.have.keys('');
+			let t = o[''];
+			expect(t).to.be.an(Array);
+			expect(t).to.have.property('length').greaterThan(3);
 		});
 		it('Folder with children', () => {
 			const name = 'daddy';
@@ -65,10 +67,13 @@ describe('DirEntry', () => {
 				isFile: () => true,
 				isDirectory: () => false
 			});
-			let o = toJSONandBack(daddy);
-			expect(o).to.have.property(daddy.name);
-			expect(o[name]).to.have.length(-1);
-			
+			let o = serializeAndParse(daddy);
+			expect(o).to.be.an(Object);
+			expect(o).not.to.be.an(Array);
+			expect(o).to.only.have.keys('', 'folderChild', 'fileChild');
+			let t = o[''];
+			expect(t).to.be.an(Array);
+			expect(t).to.have.property('length').greaterThan(3);
 		});
 	});
 });
